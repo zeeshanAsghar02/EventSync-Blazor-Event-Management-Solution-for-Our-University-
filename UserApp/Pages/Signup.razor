@@ -1,0 +1,144 @@
+﻿@page "/signup"
+@layout SecondaryLayout
+@inject NavigationManager na
+
+<PageTitle>Sign Up</PageTitle>
+
+<!-- Include necessary CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<style>
+    .form-control:focus,
+    .input-group:focus-within {
+        box-shadow: 0 0 0 0.25rem rgba(116, 0, 116, 0.25);
+    }
+
+    .btn-primary:focus {
+        box-shadow: none;
+    }
+
+    .input-group {
+        margin-bottom: 1rem; /* Reduce spacing between input fields */
+    }
+
+    .signup-container {
+        width: 400px;
+        padding: 20px; /* Add padding */
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .signup-header {
+        margin-bottom: 2rem; /* Adjust spacing for the header */
+    }
+</style>
+
+<!-- Signup page content -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6" style="height: 100vh; background-image: url('images/img1.jpg'); background-size: cover; background-position:center;">
+            <div class="back-button-container" style="position: absolute; top: 20px; left: 20px;">
+                <a href="/" style="color: white; text-decoration: none;"><i class="fas fa-arrow-left"></i></a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+                <div class="signup-container">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <ul class="nav nav-pills nav-justified signup-header" id="ex1" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <NavLink class="nav-link" id="tab-login" href="/login" style="background-color:white; color:#740074">Login</NavLink>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="tab-signup" @onclick="HandleSignupClick" role="tab"
+                                            aria-controls="pills-signup" aria-selected="true" style="background-color: #740074;">
+                                        Sign Up
+                                    </button>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="pills-signup" role="tabpanel" aria-labelledby="tab-signup">
+                                    <form @onsubmit="HandleSignupSubmit">
+                                        <div class="input-group">
+                                            <InputText id="signupName" class="form-control" @bind-Value="username" placeholder="Username" required />
+                                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                        </div>
+                                        <div class="input-group">
+                                            <InputText id="signupEmail" class="form-control" @bind-Value="email" placeholder="Email" required />
+                                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                        </div>
+                                        <div class="input-group">
+                                            <InputText id="signupPassword" class="form-control" @bind-Value="password" placeholder="Password" type="password" required />
+                                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                        </div>
+                                        <div class="input-group">
+                                            <InputText id="signupFullName" class="form-control" @bind-Value="fullName" placeholder="Full Name" required />
+                                            <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                                        </div>
+                                        <div class="input-group">
+                                            <InputText id="signupPhoneNumber" class="form-control" @bind-Value="phoneNumber" placeholder="Phone Number" required />
+                                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                        </div>
+                                        <div class="input-group">
+                                            <select class="form-control" @bind="userrole">
+                                                <option value="Organizer">Organizer</option>
+                                                <option value="Regular Attendee">Regular Attendee</option>
+                                            </select>
+                                            <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+                                        </div>
+                                        <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block" style="background-color: #740074;">Sign Up</button>
+                                        <div class="text-center mt-3">
+                                            <p>Already a member? <NavLink href="/login" style="color: #740074; text-decoration: none;">Login</NavLink></p>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col d-flex justify-content-center">
+                                    <a href="https://www.google.com" class="mr-4" style="color: #740074;"><i class="fab fa-google fa-2x"></i></a>
+                                    <a href="https://www.github.com" class="mr-4" style="color: #740074;"><i class="fab fa-github fa-2x"></i></a>
+                                    <a href="https://www.facebook.com" class="mr-4" style="color: #740074;"><i class="fab fa-facebook fa-2x"></i></a>
+                                    <a href="" style="color: #740074;"><i class="fab fa-slack fa-2x"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    string username;
+    string email;
+    string password;
+    string fullName;
+    string phoneNumber;
+    string userrole = "Regular Attendee"; // Default role
+
+    private void HandleSignupClick()
+    {
+        // Handle signup button click logic here
+    }
+
+    private void HandleSignupSubmit()
+    {
+        var newUser = new ModelUser
+            {
+                Username = username,
+                Email = email,
+                Password = password,
+                FullName = fullName,
+                PhoneNumber = phoneNumber,
+                UserRole = userrole // Set role based on selection
+            };
+
+        DbUser.SaveUserInformation(newUser);
+        na.NavigateTo("/login"); // Redirect to login after successful signup
+    }
+}

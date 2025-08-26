@@ -1,0 +1,142 @@
+﻿@page "/login"
+@layout SecondaryLayout
+@inject NavigationManager na
+
+<PageTitle>Login</PageTitle>
+
+<!-- Include necessary CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<style>
+    .form-control:focus,
+    .input-group:focus-within {
+        box-shadow: 0 0 0 0.25rem rgba(116, 0, 116, 0.25);
+    }
+
+    .btn-primary:focus {
+        box-shadow: none;
+    }
+</style>
+
+<!-- Login page content -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6" style="height: 100vh; background-image: url('images/img1.jpg'); background-size: cover; background-position:center;">
+            <div class="back-button-container" style="position: absolute; top: 20px; left: 20px;">
+                <a href="/" style="color: white; text-decoration: none;"><i class="fas fa-arrow-left"></i></a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+                <div class="login-container" style="width: 400px; height: 500px; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active mr-4" id="tab-login" @onclick="HandleLoginClick" role="tab"
+                                            aria-controls="pills-login" aria-selected="true" style="background-color: #740074;">
+                                        Login
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <NavLink class="nav-link" id="tab-signup" href="/signup" style="background-color:white; color:#740074">Sign Up</NavLink>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
+                                    @if (!string.IsNullOrEmpty(loginErrorMessage))
+                                    {
+                                        <div class="alert alert-danger" role="alert">
+                                            <i class="fas fa-exclamation-circle"></i> @loginErrorMessage
+                                        </div>
+                                    }
+                                    <form @onsubmit="HandleLoginSubmit">
+                                        <div class="input-group mb-5">
+                                            <InputText id="loginName" class="form-control" @bind-Value="username" placeholder="Email" required />
+                                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                        </div>
+                                        <div class="input-group mb-5">
+                                            <InputText id="loginPassword" class="form-control" @bind-Value="password" placeholder="Password" type="password" required />
+                                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                        </div>
+                                        <div class="row mb-4">
+                                            <div class="col-md-6 d-flex justify-content-center">
+                                                <div class="form-check mb-3 mb-md-0">
+                                                    <input class="form-check-input custom-checkbox" type="checkbox" value="" id="loginCheck" checked />
+                                                    <label class="form-check-label" for="loginCheck"> Remember me </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 d-flex justify-content-center">
+                                                <a href="forgot-password" style="color: #6c757d; text-decoration: none;">Forgot password?</a>
+                                            </div>
+                                        </div>
+                                        <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4" style="background-color: #740074;">Sign in</button>
+                                        <div class="text-center">
+                                            <p>Not a member? <NavLink href="/signup" style="color: #740074; text-decoration: none;">Register</NavLink></p>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col d-flex justify-content-center">
+                                    <a href=" https://www.google.com" class="mr-4" style="color: #740074;"><i class="fab fa-google fa-2x"></i></a>
+                                    <a href="https://www.github.com" class="mr-4" style="color: #740074;"><i class="fab fa-github fa-2x"></i></a>
+                                    <a href="https://www.facebook.com" class="mr-4" style="color: #740074;"><i class="fab fa-facebook fa-2x"></i></a>
+                                    <a href="" style="color: #740074;"><i class="fab fa-slack fa-2x"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    string username;
+    string password;
+    string loginErrorMessage;
+    private List<ModelUser> listUsers = new List<ModelUser>();
+
+    protected override void OnInitialized()
+    {
+        listUsers = DbUser.GetUserInformation();
+        base.OnInitialized();
+    }
+
+    private void HandleLoginClick()
+    {
+        // Handle login button click logic here
+        // For now, prevent navigation
+    }
+
+    private void HandleLoginSubmit()
+    {
+        loginErrorMessage = string.Empty;
+
+        foreach (var user in listUsers)
+        {
+            if (user.Email == username && user.Password == password)
+            {
+                Session.LoggedIn = true;
+                Session.CurrentUser = user;
+                na.NavigateTo("/");
+                return;
+            }
+        }
+
+        // If no matching user is found, set the error message
+        loginErrorMessage = "Incorrect Email or Password.";
+        StateHasChanged();
+    }
+
+    private void NavigateToSignUp()
+    {
+        na.NavigateTo("/signup");
+    }
+}

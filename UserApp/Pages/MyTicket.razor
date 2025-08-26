@@ -1,0 +1,120 @@
+﻿@page "/my-tickets"
+@layout PrimaryLayout
+@inject NavigationManager NavigationManager
+
+<PageTitle>My Tickets</PageTitle>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+<style>
+    .ticket-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .ticket-card {
+        flex: 1 1 calc(33.33% - 20px);
+        max-width: calc(33.33% - 20px);
+        min-width: 280px;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        display: flex;
+        flex-direction: column;
+    }
+
+        .ticket-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.2);
+        }
+
+    .ticket-header {
+        background-color: #007bff;
+        color: white;
+        padding: 10px;
+        border-radius: 10px 10px 0 0;
+        text-align: center;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 700;
+    }
+
+    .ticket-body {
+        padding: 15px;
+        font-family: 'Poppins', sans-serif;
+    }
+
+        .ticket-body p {
+            margin: 5px 0;
+        }
+</style>
+
+<div class="container">
+    <h2>My Tickets</h2>
+    <div class="ticket-container">
+        @foreach (var ticket in userTickets)
+        {
+            <div class="ticket-card">
+                <div class="ticket-header">
+                    @foreach (var ev in events)
+                    {
+                        if (ev.EventId == ticket.EventId)
+                        {
+                            <h3>@ev.EventName</h3>
+                        }
+                    }
+                </div>
+                <div class="ticket-body">
+                    @foreach (var user in users)
+                    {
+                        if (user.UserId == ticket.UserId)
+                        {
+                            <p><strong>User:</strong> @user.FullName</p>
+                            <p><strong>User Phone:</strong> @user.PhoneNumber</p>
+                        }
+                    }
+                    <p><strong>Ticket Number:</strong> @ticket.TicketId</p>
+                    @foreach (var venue in venues)
+                    {
+                        @foreach (var ev in events)
+                        {
+                            if (ev.EventId == ticket.EventId && ev.VenueId == venue.VenueId)
+                            {
+                                <p><strong>Venue:</strong> @venue.VenueName</p>
+                            }
+                        }
+                    }
+                    <p><strong>User ID:</strong> @ticket.UserId</p>
+                    @foreach (var ev in events)
+                    {
+                        if (ev.EventId == ticket.EventId)
+                        {
+                            <p><strong>Organizer ID:</strong> @ev.OrganizerId</p>
+                        }
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private List<ModelTicket> userTickets = new List<ModelTicket>();
+    private List<ModelUser> users = new List<ModelUser>();
+    private List<ModelVenue> venues = new List<ModelVenue>();
+    private List<ModelEvent> events = new List<ModelEvent>();
+
+    protected override void OnInitialized()
+    {
+        userTickets = DbTicket.GetTicketInformation().Where(t => t.UserId == Session.CurrentUser.UserId).ToList();
+        venues = DbVenue.GetVenueInformation();
+        users = DbUser.GetUserInformation();
+        events = DbEvent.GetEventInformation();
+
+        base.OnInitialized();
+    }
+}

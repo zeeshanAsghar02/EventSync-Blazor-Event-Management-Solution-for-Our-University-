@@ -1,0 +1,306 @@
+﻿@page "/"
+@layout PrimaryLayout
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventSync</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        .event-icon-container {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .event-icon-wrapper {
+            text-align: center;
+            margin: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+        }
+
+        .event-icon-card {
+            padding: 2rem;
+            border-radius: 10px;
+            background-color: white;
+            color: #6c757d;
+            transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+        }
+
+        .event-icon {
+            font-size: 2.5rem;
+            border: 1px solid #d0d7de;
+            border-radius: 50%;
+            padding: 1.5rem;
+            color: inherit;
+            transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+        }
+
+        .event-icon-card:hover {
+            transform: scale(1.1);
+            background-color: #740074;
+            color: white;
+        }
+
+        .event-icon-card:hover .event-icon {
+            color: white;
+            transform: scale(1.2);
+        }
+
+        .event-label {
+            margin-top: 1rem;
+            font-size: 1rem;
+        }
+
+        .image-section,
+        .text-section {
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-section img {
+            border-radius: 20px 0 0 20px;
+            width: 100%;
+            height: auto;
+        }
+
+        .text-section {
+            font-family: 'Roboto', sans-serif;
+            padding: 30px;
+        }
+
+        h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-decoration: none; /* Remove underline from heading */
+            color: #740074; /* Adjust heading color */
+        }
+
+        p {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.6;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+
+        .interactive-paragraph {
+            color: #740074;
+            font-family: 'Arial', sans-serif;
+            transition: color 0.3s ease;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .interactive-paragraph:hover {
+            color: #8a2be2;
+            cursor: pointer;
+        }
+
+        .event-card {
+            margin-bottom: 20px;
+        }
+
+        .event-card .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .event-card .card-title {
+            margin-bottom: 10px;
+        }
+
+        .event-card .event-info {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .event-card .event-date,
+        .event-card .event-location,
+        .event-card .event-price {
+            margin-bottom: 5px;
+        }
+
+        .event-card .event-footer {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .event-card .event-footer .followers {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .event-card-hover .card-img-top {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .event-card-hover:hover .card-img-top {
+            transform: scale(1.1);
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="container-background mx-auto my-5">
+        <div class="container">
+            <div class="row">
+                <!-- Image Section -->
+                <div class="col-md-6">
+                    <div class="image-section">
+                        <img src="https://img.freepik.com/free-psd/saturday-night-party-social-media-instagram-template_505751-3745.jpg?t=st=1716389515~exp=1716393115~hmac=bf3b776fc55a751d3bbab08aefc96c63989fa56ea0fc69cc593292a37b75e68b&w=740" class="img-fluid" alt="Image">
+                    </div>
+                </div>
+                <!-- Text Section -->
+                <div class="col-md-6">
+                    <div class="text-section">
+                        <h2 class="text-center font-weight-bold text-primary mt-5 mb-3" style="font-family: 'Arial', sans-serif; cursor: pointer;" data-toggle="tooltip" data-placement="bottom" title="Welcome aboard!">Welcome OnBoard</h2>
+
+                        <p class="interactive-paragraph" style="font-family:'Cascadia Code';">
+                            Are you ready to elevate your event planning experience to new heights? Look no further! eventSync is here to revolutionize the way you organize and manage your events.
+
+                            Designed with you in mind, our app caters to event organizers, professionals, and enthusiasts alike. Whether you're planning a corporate conference, a community fundraiser, or a personal celebration, eventSync offers the perfect toolkit to streamline every aspect of your event.
+
+                            Gone are the days of juggling multiple spreadsheets, endless email threads, and last-minute chaos. With eventSync, you can effortlessly create, organize, and execute stunning events with ease. From guest list management to venue selection, from budget tracking to promotional campaigns, we've got you covered at every step of the way.
+
+                            Our intuitive interface and powerful features empower you to unleash your creativity and bring your vision to life. Say goodbye to stress and hello to seamless event planning! Welcome aboard!
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container-fluid d-flex flex-wrap justify-content-center py-3event-icon-container">
+        <div class="w-100 text-center mb-4">
+            <h2 class="event-title font-weight-bold text-uppercase">Popular Events Category</h2>
+        </div>
+        <div class="event-icon-wrapper">
+            <div class="event-icon-card">
+                <i class="bi bi-balloon event-icon"></i>
+                <div class="event-label">Welcome Party</div>
+            </div>
+        </div>
+        <div class="event-icon-wrapper">
+            <div class="event-icon-card">
+                <i class="bi bi-hand-thumbs-up event-icon"></i>
+                <div class="event-label">Farewell</div>
+            </div>
+        </div>
+        <div class="event-icon-wrapper">
+            <div class="event-icon-card">
+                <i class="bi bi-laptop event-icon"></i>
+                <div class="event-label">Tech Events</div>
+            </div>
+        </div>
+        <div class="event-icon-wrapper">
+            <div class="event-icon-card">
+                <i class="bi bi-mic event-icon"></i>
+                <div class="event-label">Motivational Speaker</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Events in Federal Capital Territory -->
+    <div class="container mt-4">
+        <h2>Previous University Events</h2>
+        <div class="row mt-4">
+            <!-- Event Card 1 -->
+            <div class="col-md-3 event-card">
+                <div class="card event-card-hover">
+                    <img class="card-img-top" src="images/img7.jpg" alt="Event image">
+                    <div class="card-body">
+                        <h5 class="card-title">Event Title 1</h5>
+                        <div class="event-info">
+                            <div class="event-location"><i class="fas fa-map-marker-alt"></i> Air University</div>
+                            <div class="event-price"><i class="fas fa-ticket-alt"></i> Price: Free</div>
+                        </div>
+                        <div class="event-footer">
+                            <div class="followers"><i class="fas fa-users"></i> 300 attendees</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Event Card 2 -->
+            <div class="col-md-3 event-card">
+                <div class="card event-card-hover">
+                    <img class="card-img-top" src="images/img6.jpg" alt="Event image">
+                    <div class="card-body">
+                        <h5 class="card-title">Event Title 2</h5>
+                        <div class="event-info">
+                            <div class="event-location"><i class="fas fa-map-marker-alt"></i> Air University</div>
+                            <div class="event-price"><i class="fas fa-ticket-alt"></i> Price: Free</div>
+                        </div>
+                        <div class="event-footer">
+                            <div class="followers"><i class="fas fa-users"></i> 250 attendees</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Event Card 3 -->
+            <div class="col-md-3 event-card">
+                <div class="card event-card-hover">
+                    <img class="card-img-top" src="images/img8.jpg" alt="Event image">
+                    <div class="card-body">
+                        <h5 class="card-title">Event Title 3</h5>
+                        <div class="event-info">
+                            <div class="event-location"><i class="fas fa-map-marker-alt"></i> Air University</div>
+                            <div class="event-price"><i class="fas fa-ticket-alt"></i> Price: Free</div>
+                        </div>
+                        <div class="event-footer">
+                            <div class="followers"><i class="fas fa-users"></i> 400 attendees</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Event Card 4 -->
+            <div class="col-md-3 event-card">
+                <div class="card event-card-hover">
+                    <img class="card-img-top" src="images/img9.jpg" alt="Event image">
+                    <div class="card-body">
+                        <h5 class="card-title">Event Title 4</h5>
+                        <div class="event-info">
+                            <div class="event-location"><i class="fas fa-map-marker-alt"></i> Air University</div>
+                            <div class="event-price"><i class="fas fa-ticket-alt"></i> Price: Free</div>
+                        </div>
+                        <div class="event-footer">
+                            <div class="followers"><i class="fas fa-users"></i> 350 attendees</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
+

@@ -1,0 +1,60 @@
+﻿@page "/about-us"
+@layout PrimaryLayout
+<style>
+    .featurette-image-container {
+        width: 100%; /* ensures the container fits within its parent */
+        height: auto; /* maintains aspect ratio of images */
+        overflow: hidden;
+        box-shadow: 0px 4px 8px #744074;
+        margin: 0; /* reset any default margin */
+        padding: 3%; /* consistent padding */
+        box-sizing: border-box; /* includes padding in width calculation */
+    }
+
+        .featurette-image-container img {
+            width: 100%; /* ensures image scales to container */
+            height: auto; /* maintains aspect ratio */
+            border-top-right-radius: 50px;
+            border-bottom-left-radius: 20px;
+            transition: transform 0.5s ease-in-out; /* smooth transition for transform */
+        }
+
+        .featurette-image-container:hover img {
+            transform: scale(1.1); /* zoom effect on hover */
+        }
+
+    /* Ensuring no overflow or extra space */
+    .row {
+        margin-left: 0;
+        margin-right: 0;
+    }
+</style>
+
+<div class="row featurette mt-5">
+    <div class="col-md-7 d-flex align-items-center">
+        <div class="text-md-start p-3">
+            <h2 class="featurette-heading fw-normal lh-1">First featurette heading. <span class="text-body-secondary">It’ll blow your mind.</span></h2>
+            <p class="lead">Some great placeholder content for the first featurette here. Imagine some exciting prose here.</p>
+        </div>
+    </div>
+    <div class="col-md-5 d-flex align-items-center justify-content-center">
+        <div class="featurette-image-container p-3">
+            <img src="images/img2.png" class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" alt="Placeholder Image">
+        </div>
+    </div>
+</div>
+<hr class="featurette-divider">
+<div class="row featurette mt-5">
+    <div class="col-md-7 order-md-2 d-flex align-items-center">
+        <div class="text-md-start p-3">
+            <h2 class="featurette-heading fw-normal lh-1">Oh yeah, it’s that good. <span class="text-body-secondary">See for yourself.</span></h2>
+            <p class="lead">Another featurette? Of course. More placeholder content here to give you an idea of how this layout would work with some actual real-world content in place.</p>
+        </div>
+    </div>
+    <div class="col-md-5 order-md-1 d-flex align-items-center justify-content-center">
+        <div class="featurette-image-container p-3">
+            <img src="images/img3.png" class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" alt="Placeholder Image">
+        </div>
+    </div>
+</div>
+<hr class="featurette-divider">

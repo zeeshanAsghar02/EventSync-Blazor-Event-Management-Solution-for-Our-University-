@@ -1,0 +1,61 @@
+﻿@page "/book-ticket/{eventId:int}"
+@layout PrimaryLayout
+@inject NavigationManager NavigationManager
+
+<PageTitle>Book Ticket</PageTitle>
+
+<div class="container">
+    @if (evs != null)
+    {
+        <h2>Book Ticket for @evs.EventName</h2>
+        <form @onsubmit="HandleTicketBooking">
+            <div class="form-group">
+                <label for="eventName">Event Name</label>
+                <input type="text" id="eventName" class="form-control" value="@evs.EventName" readonly />
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" id="description" class="form-control" value="@evs.Description" readonly />
+            </div>
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input type="text" id="price" class="form-control" value="@evs.Price" readonly />
+            </div>
+            <button type="submit" class="btn btn-primary">Book Ticket</button>
+        </form>
+        @if (showMessage)
+        {
+            <div class="alert alert-success mt-3">
+                Your booking has been forwarded to the event organizer. You can check your ticket by clicking on the "My Tickets" option in the Help Center menu box after approval.
+            </div>
+        }
+    }
+</div>
+
+@code {
+    [Parameter]
+    public int eventId { get; set; }
+    private List<ModelEvent> events = new List<ModelEvent>();
+    public ModelEvent evs { get; set; }
+    private bool showMessage = false;
+
+    protected override void OnInitialized()
+    {
+        events = DbEvent.GetEventInformation();
+        evs = events.FirstOrDefault(e => e.EventId == eventId);
+        base.OnInitialized();
+    }
+
+    private void HandleTicketBooking()
+    {
+        var ticket = new ModelCheckTicket
+            {
+                Eventid = eventId,
+                UserId = Session.CurrentUser.UserId,
+                Price = Convert.ToDecimal(evs.Price)
+            };
+
+        DbChequeTickets.SaveChequeTicket(ticket);
+        showMessage = true;
+    }
+}

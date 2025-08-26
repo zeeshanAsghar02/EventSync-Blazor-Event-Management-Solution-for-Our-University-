@@ -1,0 +1,264 @@
+﻿@page "/find-events"
+@layout PrimaryLayout
+@inject NavigationManager na
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+<style>
+    .centered-div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .event-card {
+        flex: 1 1 calc(50% - 40px);
+        max-width: calc(50% - 40px);
+        min-width: 280px;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.2);
+        }
+
+    .event-header {
+        background-color: #740074;
+        color: white;
+        padding: 10px;
+        border-radius: 5px 5px 0 0;
+        text-align: center;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 700;
+    }
+
+    .event-body {
+        padding: 15px;
+        font-family: 'Arial', sans-serif;
+        text-align: center;
+    }
+
+    .event-description {
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .event-footer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        padding: 10px;
+        border-top: 1px solid #ccc;
+        font-size: 0.9rem;
+        font-family: 'Arial', sans-serif;
+    }
+
+    .info-card {
+        padding: 10px;
+        background-color: #e7f0fa;
+        border-radius: 5px;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+        margin: 5px;
+        flex: 1;
+        text-align: center;
+        font-family: 'Poppins', sans-serif;
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+        .info-card:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+    .button-row {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
+
+    .event-card:hover .button-row {
+        opacity: 1;
+    }
+
+    .grab-seat-button, .approve-tickets-button, .delete-event-button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .grab-seat-button, .approve-tickets-button {
+        background-color: #740074;
+        color: white;
+    }
+
+    .delete-event-button {
+        background-color: #ff4d4d;
+        color: white;
+    }
+
+    .event-card:hover:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        opacity: 1;
+        transition: opacity 0.2s ease;
+    }
+</style>
+
+<div class="centered-div">
+    <h2 style="color: #740074;">Event List</h2>
+    <div class="card-container">
+        @foreach (var ev in events)
+        {
+            <div class="event-card">
+                <div class="event-header">
+                    <h3 style="font-family: 'Poppins', sans-serif;">@ev.EventName</h3>
+                </div>
+                <div class="event-body">
+                    <p class="event-description">@ev.Description</p>
+                    <p><i class="fas fa-dollar-sign"></i> <strong>Price:</strong> @ev.Price</p>
+                    <p><i class="fas fa-clock"></i> <strong>Start Time:</strong> @ev.StartTime</p>
+                    <p><i class="fas fa-clock"></i> <strong>End Time:</strong> @ev.EndTime</p>
+                    @foreach (var evt in eventtypes)
+                    {
+                        if (evt.EventTypeId == ev.EventTypeId)
+                        {
+                            <p><i class="fas fa-tag"></i> <strong>Event Type:</strong> @evt.EventTypeName</p>
+
+                        }
+                    }
+                </div>
+                <div class="event-footer">
+                    <div class="info-card">
+                        @foreach (var ven in venues)
+                        {
+                            if (ev.VenueId == ven.VenueId)
+                            {
+                                <div>
+                                    <span><i class="fas fa-map-marker-alt"></i> <strong>Venue:</strong> @ven.VenueName</span><br />
+                                    <span><strong>Address:</strong> @ven.Address</span><br />
+                                    <span><strong>Capacity:</strong> @ev.TicketsBooked / @ven.Capacity</span>
+                                </div>
+                            }
+                        }
+                    </div>
+                    <div class="info-card">
+                        @foreach (var us in users)
+                        {
+                            if (ev.OrganizerId == us.UserId)
+                            {
+                                <div>
+                                    <span><i class="fas fa-user"></i> <strong>Organizer:</strong> @us.FullName</span><br />
+                                    <span><strong>Email:</strong> @us.Email</span><br />
+                                    <span><strong>Phone:</strong> @us.PhoneNumber</span>
+
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="button-row">
+                    @if (ev.OrganizerId == Session.CurrentUser.UserId)
+                    {
+                        @if (deletedEventIds.Contains(ev.EventId))
+                        {
+                            <button class="delete-event-button" disabled>Deleted</button>
+                            
+                        }
+                        else
+                        {
+                            <button class="approve-tickets-button" @onclick="() => NavigateToApproveTickets(ev.EventId)">Approve Tickets</button>
+                            <button class="delete-event-button" @onclick="() => DeleteEvent(ev.EventId)">Delete Event</button>
+                        }
+                    }
+                    else if (capacityCount(ev.EventId) <= ev.TicketsBooked)
+                    {
+                        <br />
+
+                        <span><strong>Capacity full!</strong></span>
+                    }
+                    else
+                    {
+                        <button class="grab-seat-button" @onclick="() => NavigateToBookTicket(ev.EventId)">Grab Seat!</button>
+                    }
+
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private List<ModelEvent> events = new List<ModelEvent>();
+    private List<ModelEventType> eventtypes = new List<ModelEventType>();
+    private List<ModelVenue> venues = new List<ModelVenue>();
+    private List<ModelUser> users = new List<ModelUser>();
+    private List<ModelTicket> tickets = new List<ModelTicket>();
+    private HashSet<int> deletedEventIds = new HashSet<int>();
+
+    protected override void OnInitialized()
+    {
+        events = DbEvent.GetEventInformation();
+        eventtypes = DbEventType.GetEventTypeInformation();
+        venues = DbVenue.GetVenueInformation();
+        users = DbUser.GetUserInformation();
+        tickets = DbTicket.GetTicketInformation();
+        base.OnInitialized();
+    }
+
+    private void NavigateToBookTicket(int eventId)
+    {
+        na.NavigateTo($"/book-ticket/{eventId}");
+    }
+
+    private void NavigateToApproveTickets(int eventId)
+    {
+        na.NavigateTo($"/approve-tickets/{eventId}");
+    }
+
+    private void DeleteEvent(int eventId)
+    {
+        DbEvent.DeleteEventInformation(eventId);
+        deletedEventIds.Add(eventId);
+        StateHasChanged();
+        OnInitialized();
+    }
+
+    private int capacityCount(int id)
+    {
+        foreach (var ven in venues)
+        {
+            return ven.Capacity;
+        }
+        return 0;
+    }
+}

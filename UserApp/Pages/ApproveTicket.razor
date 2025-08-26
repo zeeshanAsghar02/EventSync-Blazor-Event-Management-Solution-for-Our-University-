@@ -1,0 +1,96 @@
+﻿@page "/approve-tickets/{eventId:int}"
+@layout PrimaryLayout
+@inject NavigationManager NavigationManager
+
+<PageTitle>Approve Tickets</PageTitle>
+
+<div class="container">
+    <h2>Approve Tickets for Event @eventName</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Ticket ID</th>
+                <th>User Name</th>
+                <th>User Email</th>
+                <th>User Phone</th>
+                <th>Price</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ticket in tickets)
+            {
+                var user = users.FirstOrDefault(u => u.UserId == ticket.UserId);
+                <tr>
+                    <td>@ticket.CheckId</td>
+                    <td>@user?.FullName</td>
+                    <td>@user?.Email</td>
+                    <td>@user?.PhoneNumber</td>
+                    <td>@ticket.Price</td>
+                    <td>
+                        <button class="btn btn-success" @onclick="() => ApproveTicket1(ticket)" disabled="@IsTicketApproved(ticket.CheckId)">
+                            @GetButtonLabel(ticket.CheckId)
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    [Parameter]
+    public int eventId { get; set; }
+    private List<ModelUser> users = new List<ModelUser>();
+    private List<ModelCheckTicket> tickets = new List<ModelCheckTicket>();
+    private List<ModelEvent> events = new List<ModelEvent>();
+    private string eventName;
+    private HashSet<int> approvedTickets = new HashSet<int>(); // Keep track of approved ticket IDs
+
+    protected override void OnInitialized()
+    {
+        tickets = DbChequeTickets.GetAllChequeTickets().Where(t => t.Eventid == eventId).ToList();
+        users = DbUser.GetUserInformation();
+        events = DbEvent.GetEventInformation();
+
+        var eventDetails = events.FirstOrDefault(e => e.EventId == eventId);
+        if (eventDetails != null)
+        {
+            eventName = eventDetails.EventName;
+        }
+
+        base.OnInitialized();
+    }
+
+    private async Task ApproveTicket1(ModelCheckTicket ticket)
+    {
+        if (!approvedTickets.Contains(ticket.CheckId))
+        {
+            // Approve the ticket
+            var mt = new ModelTicket
+                {
+                    UserId = ticket.UserId,
+                    Price = ticket.Price,
+                    EventId = ticket.Eventid,
+                };
+            DbTicket.SaveTicketInformation(mt);
+
+            // Add ticket ID to approvedTickets set
+            approvedTickets.Add(ticket.CheckId);
+            DbChequeTickets.DeleteChequeTicket(ticket.CheckId);
+
+            // Update the UI
+            StateHasChanged();
+        }
+    }
+
+    private string GetButtonLabel(int ticketId)
+    {
+        return approvedTickets.Contains(ticketId) ? "Approved" : "Approve";
+    }
+
+    private bool IsTicketApproved(int ticketId)
+    {
+        return approvedTickets.Contains(ticketId);
+    }
+}
